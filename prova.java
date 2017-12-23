@@ -737,7 +737,6 @@ public class Utils {
 			if (literals[dayOfWeek - 1].equals("SAT") || literals[dayOfWeek - 1].equals("SUN")) {
 				filtered.add(fe);
 			}
-
 		}
 		filtered.sort(new Comparator<FinalEntry>() {
 
@@ -805,20 +804,16 @@ public class Utils {
 		if (verbose) {
 			System.out.println(equilibriumsAsUnders);
 			System.out.println(equilibriumsAsOvers);
-		}
-
-		if (verbose)
 			System.out.println("Avg return: " + avgReturn(onlyFixtures(noEquilibriums)));
+		}
+			
 		Stats allStats = new Stats(noEquilibriums, "all");
 		stats.add(allStats);
-		if (verbose)
+		if (verbose){
 			System.out.println(allStats);
-
-		if (verbose)
 			System.out.println(thresholdsByLeague(all));
-		if (verbose)
 			LineChart.draw(Utils.createProfitMovementData(Utils.noequilibriums(all)), description);
-
+		}
 		// Settings initial = new Settings("", 0f, 0f, 0f, 0.55f, 0.55f, 0.55f,
 		// 0.5f, 0f).withShots(1f);
 
@@ -834,47 +829,38 @@ public class Utils {
 		ArrayList<FinalEntry> overs = Utils.onlyOvers(noEquilibriums);
 		ArrayList<FinalEntry> unders = Utils.onlyUnders(noEquilibriums);
 
-		if (verbose) {
-			System.err.println(description);
-			System.out.println();
-		}
-
-		if (verbose)
-			System.out.println();
+		isVerboseSystemOutPrint(verbose,description);
+		isVerboseSystemOutPrint(verbose,null);
+		isVerboseSystemOutPrint(verbose,null);
+			
 		ArrayList<Stats> byCertaintyandCOT = byCertaintyandCOT(noEquilibriums, "", verbose);
 		stats.addAll(byCertaintyandCOT);
 
-		if (verbose)
-			System.out.println();
+		isVerboseSystemOutPrint(verbose,null);
 		ArrayList<Stats> byOdds = byOdds(noEquilibriums, "", verbose);
 		stats.addAll(byOdds);
 
-		if (verbose)
-			System.out.println();
+		isVerboseSystemOutPrint(verbose,null);
 		ArrayList<Stats> byValue = byValue(noEquilibriums, "", verbose);
 		stats.addAll(byValue);
 
 		Stats underStats = new Stats(unders, "unders");
-		if (verbose)
-			System.out.println(underStats);
+		isVerboseSystemOutPrint(verbose,null);
 		stats.add(underStats);
 
-		if (verbose)
-			System.out.println();
+		isVerboseSystemOutPrint(verbose,null);
 		ArrayList<Stats> byCertaintyandCOTUnders = byCertaintyandCOT(unders, "unders", verbose);
 		stats.addAll(byCertaintyandCOTUnders);
 
-		if (verbose)
-			System.out.println();
+		isVerboseSystemOutPrint(verbose,null);
 		ArrayList<Stats> byOddsUnders = byOdds(unders, "unders", verbose);
 		stats.addAll(byOddsUnders);
 
 		Stats overStats = new Stats(overs, "overs");
-		if (verbose)
-			System.out.println(overStats);
+		isVerboseSystemOutPrint(verbose,overStats);
 		stats.add(overStats);
 
-		System.out.println();
+		isVerboseSystemOutPrint(verbose,null);
 		ArrayList<Stats> byCertaintyandCOTover = byCertaintyandCOT(overs, "overs", verbose);
 		stats.addAll(byCertaintyandCOTover);
 
@@ -890,26 +876,21 @@ public class Utils {
 
 		Stats allOvers = new Stats(allOvers(Utils.onlyFixtures(noEquilibriums)), "all Overs");
 		stats.add(allOvers);
-		if (verbose) {
-			System.out.println();
-			System.out.println(allOvers);
-		}
+		isVerboseSystemOutPrint(verbose,null);
+		isVerboseSystemOutPrint(verbose,allOvers);
 
 		Stats allUnders = new Stats(allUnders(Utils.onlyFixtures(noEquilibriums)), "all Unders");
-		if (verbose)
-			System.out.println(allUnders);
+		isVerboseSystemOutPrint(verbose,allUnders);
 		stats.add(allUnders);
 
 		Stats higherOdds = new Stats(higherOdds(Utils.onlyFixtures(noEquilibriums)), "higher Odds");
 		Stats lowerOdds = new Stats(lowerOdds(Utils.onlyFixtures(noEquilibriums)), "lower Odds");
 		stats.add(higherOdds);
 		stats.add(lowerOdds);
-		if (verbose) {
-			System.out.println();
-			System.out.println(higherOdds);
-			System.out.println(lowerOdds);
-		}
-
+		isVerboseSystemOutPrint(verbose,null);
+		isVerboseSystemOutPrint(verbose,higherOdds);
+		isVerboseSystemOutPrint(verbose,lowerOdds);
+	
 		System.out.println();
 		int wins = 0;
 		float draws = 0f;
@@ -930,9 +911,10 @@ public class Utils {
 					+ format((float) draws / certs) + " not losses: " + format((float) (wins + draws) / certs));
 
 		ArrayList<Stats> normalizedStats = new ArrayList<>();
-		for (Stats st : stats)
-			if (st.getPvalueOdds() > 4 && !st.all.isEmpty())
-				normalizedStats.add(new NormalizedStats(st.all, "norm " + st.description));
+		for (Stats st : stats){
+			statsControl(st,normalizedStats);
+		}
+			
 		stats.addAll(normalizedStats);
 
 		System.out.println();
