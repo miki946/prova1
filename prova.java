@@ -895,16 +895,6 @@ public class Utils {
 		int wins = 0;
 		float draws = 0f;
 		int certs = 0;
-		for (FinalEntry fe : noEquilibriums) {
-			float certainty = fe.prediction > fe.threshold ? fe.prediction : (1f - fe.prediction);
-			if (certainty >= 0f)
-				certs++;
-			if (certainty >= 0f && fe.success())
-					wins++;
-			if (certainty < 0f && !fe.success() && ((fe.prediction >= fe.upper && fe.fixture.getTotalGoals() == 2)
-				 || (fe.prediction <= fe.lower && fe.fixture.getTotalGoals() == 3)))
-					draws++;
-			}
 
 		if (verbose)
 			System.out.println("Soft lines wins: " + format((float) wins / certs) + " draws: "
